@@ -1,22 +1,9 @@
-let squares = "", bombPosition = 0
-let bombs = [
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)},
-  {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)}
-]
-
+let squares = "", bombPosition = 0, clickCounter = 50
+let bombs = []
 
 function minesweeperGame() {
   squares = ""
+  generateBombs()
   for (let line = 1; line <= 20; ++line)
     for (let column = 1; column <= 20; ++column){
       let bombFound = 0
@@ -34,6 +21,11 @@ function minesweeperGame() {
   document.getElementById("minesweeperGrid").innerHTML = squares
 }
 
+function generateBombs(){
+  for (let n = 0; n < 50; ++n)
+    bombs[n] = {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)}
+}
+
 function clickBombs() {
   for (let i = 0; i < bombs.length; ++i){
     document.getElementById(bombs[i].x + '/' + bombs[i].y).classList.remove('cell-grid')
@@ -44,7 +36,16 @@ function clickBombs() {
 }
 
 function goodCell(l, c) {
-    document.getElementById(l + '/' + c).innerHTML = "0"
+  ++clickCounter
+  let numberOfBombsAround = 0
+  for (let i = 1, s = l - 1; i <= 3; ++i, ++s)
+    for (let j = 1, r = c - 1; j <= 3; ++j, ++r)
+      for (let k = 0; k < bombs.length; ++k)
+        if(bombs[k].x == s && bombs[k].y == r)
+          ++numberOfBombsAround
+  document.getElementById(l + '/' + c).innerHTML = numberOfBombsAround
+  if (clickCounter == 400)
+    document.getElementById("maxScore").innerHTML = "Congratulations! You won!"
 }
 
 window.onload = minesweeperGame
