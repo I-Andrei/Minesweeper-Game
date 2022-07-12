@@ -1,6 +1,5 @@
-let squares = "", bombPosition = 0, clickCounter = 50
+let squares = "", clickCounter = 49
 let bombs = []
-let counterZeroCells = 0
 
 function minesweeperGame() {
   squares = ""
@@ -20,8 +19,16 @@ function minesweeperGame() {
 }
 
 function generateBombs() {
-  for (let n = 0; n < 50; ++n)
+  for (let n = 0; n < 50; ++n){
     bombs[n] = {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)}
+    for (let m = 0; m < n && n > 0; ++m){
+      if (bombs[n].x == bombs[m].x && bombs[n].y == bombs[m].y){
+        console.log(bombs[n])
+        bombs[n] = {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)}
+        m = 0
+      }
+    }
+  }
 }
 
 function clickBombs() {
