@@ -1,4 +1,4 @@
-let squares = "", clickCounter = 49
+let squares = "", clickCounter = 50
 let bombs = []
 
 function minesweeperGame() {
@@ -19,7 +19,7 @@ function minesweeperGame() {
 }
 
 function generateBombs() {
-  for (let n = 0; n < 50; ++n){
+  for (let n = 0; n < 49; ++n){
     bombs[n] = {x: Math.floor(Math.random() * 20 + 1), y: Math.floor(Math.random() * 20 + 1)}
     for (let m = 0; m < n && n > 0; ++m){
       if (bombs[n].x == bombs[m].x && bombs[n].y == bombs[m].y){
@@ -41,17 +41,16 @@ function clickBombs() {
 }
 
 function goodCell(l, c) {
+  if (clickCounter == 400)
+    document.getElementById("maxScore").innerHTML = "Congratulations! You won!"
+  else
+    ++clickCounter
   let numberOfBombsAround = howManyBombsAround(l, c, 0)
   if (numberOfBombsAround == 0){
     document.getElementById(l + '/' + c).innerHTML = 0
-    ++clickCounter
     expand(l, c)
-  } else {
+  } else
     document.getElementById(l + '/' + c).innerHTML = numberOfBombsAround
-    ++clickCounter
-  }
-  if (clickCounter == 400)
-    document.getElementById("maxScore").innerHTML = "Congratulations! You won!"
 }
 
 function howManyBombsAround(l, c, numberOfBombsAround) {
@@ -72,12 +71,21 @@ function expand(l, c) {
         let howManyB = howManyBombsAround(s, r, 0)
         if (howManyB == 0 && verifyZero != "0"){
           document.getElementById(s + '/' + r).innerHTML = 0
+          if (clickCounter == 400)
+            document.getElementById("maxScore").innerHTML = "Congratulations! You won!"
+          else
+            ++clickCounter
           expand(s, r)
-          ++clickCounter
-        } else if (howManyB > 0 && verifyZero == "")
+        } else if (howManyB > 0 && verifyZero == ""){
           document.getElementById(s + '/' + r).innerHTML = howManyB
+          if (clickCounter == 400)
+            document.getElementById("maxScore").innerHTML = "Congratulations! You won!"
+          else
+            ++clickCounter
+        }
       }
     }
+    console.log(clickCounter)
 }
 
 
